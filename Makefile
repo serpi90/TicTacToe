@@ -2,9 +2,10 @@ C++ = g++
 CC = gcc
 DFLAGS = -Wall -Wextra -ansi -pedantic-errors
 OFLAGS = -O3
+LFLAGS = -lcunit
 CFLAGS = $(DFLAGS) $(OFLAGS) $(LFLAGS)
 
-APPLICATIONS = board
+APPLICATIONS = board tests
 
 COMMON_HEADERS = board.h
 MODEL = 
