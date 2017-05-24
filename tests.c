@@ -1,49 +1,29 @@
 #include <stdio.h>
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+
 #include "board.h"
+#include "board_rotation.h"
 
-/* Printing functions */
-char cellValue( enum position_t value ) {
-	switch (value) {
-		case EMPTY: return ' ';
-		case CROSS: return 'X';
-		case CIRCLE: return 'O';
-		default: return '?';
-	}
-}
-
-void printBoard( unsigned short board ) {
-	printf("+-+-+-+\n|%c|%c|%c|\n|%c|%c|%c|\n|%c|%c|%c|\n+-+-+-+\nLastBit: %hu\n\n",
-			cellValue(getCell(board, TOP_LEFT)),
-			cellValue(getCell(board, TOP_CENTER)),
-			cellValue(getCell(board, TOP_RIGHT)),
-			cellValue(getCell(board, CENTER_LEFT)),
-			cellValue(getCell(board, CENTER_CENTER)),
-			cellValue(getCell(board, CENTER_RIGHT)),
-			cellValue(getCell(board, BOTTOM_LEFT)),
-			cellValue(getCell(board, BOTTOM_CENTER)),
-			cellValue(getCell(board, BOTTOM_RIGHT)),
-			getLastBit( board ) );
-}
+#include "board_print.h"
 
 void test_getCell(void) {
 	board_t board = EMPTY_BOARD;
-	CU_ASSERT( getCell( 0, TOP_LEFT ) == EMPTY );
-	CU_ASSERT( getCell( 1, TOP_LEFT ) == CROSS );
-	CU_ASSERT( getCell( 2, TOP_LEFT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( 0, TOP_LEFT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( 1, TOP_LEFT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 2, TOP_LEFT ) == CIRCLE );
 
-	CU_ASSERT( getCell( 3, TOP_LEFT ) == EMPTY );
-	CU_ASSERT( getCell( 3, TOP_CENTER ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 3, TOP_LEFT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( 3, TOP_CENTER ) == CROSS );
 
-	CU_ASSERT( getCell( 4, TOP_LEFT ) == CROSS );
-	CU_ASSERT( getCell( 4, TOP_CENTER ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 4, TOP_LEFT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 4, TOP_CENTER ) == CROSS );
 
-	CU_ASSERT( getCell( 5, TOP_LEFT ) == CIRCLE );
-	CU_ASSERT( getCell( 4, TOP_CENTER ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 5, TOP_LEFT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( 4, TOP_CENTER ) == CROSS );
 
-	CU_ASSERT( getCell( 13122, BOTTOM_RIGHT ) == CIRCLE );
-	CU_ASSERT( getCell( 6561, BOTTOM_RIGHT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( 13122, BOTTOM_RIGHT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( 6561, BOTTOM_RIGHT ) == CROSS );
 
 	/*
 	 * Stored in base 3,
@@ -60,28 +40,28 @@ void test_getCell(void) {
 	 * OX.
 	 */
  	board = 4069;
-	CU_ASSERT( getCell( board, TOP_LEFT ) == CROSS );
-	CU_ASSERT( getCell( board, TOP_CENTER ) == EMPTY );
-	CU_ASSERT( getCell( board, TOP_RIGHT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( board, TOP_LEFT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( board, TOP_CENTER ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( board, TOP_RIGHT ) == CIRCLE );
 
-	CU_ASSERT( getCell( board, CENTER_LEFT ) == EMPTY );
-	CU_ASSERT( getCell( board, CENTER_CENTER ) == CIRCLE );
-	CU_ASSERT( getCell( board, CENTER_RIGHT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( board, CENTER_LEFT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( board, CENTER_CENTER ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( board, CENTER_RIGHT ) == CROSS );
 
-	CU_ASSERT( getCell( board, BOTTOM_LEFT ) == CIRCLE );
-	CU_ASSERT( getCell( board, BOTTOM_CENTER ) == CROSS );
-	CU_ASSERT( getCell( board, BOTTOM_RIGHT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( board, BOTTOM_LEFT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( board, BOTTOM_CENTER ) == CROSS );
+	CU_ASSERT_TRUE( getCell( board, BOTTOM_RIGHT ) == EMPTY );
 }
 
 void test_setCell(void) {
 	board_t board = EMPTY_BOARD;
-	CU_ASSERT( getCell( setCell( board, TOP_LEFT, EMPTY ), TOP_LEFT ) == EMPTY );
-	CU_ASSERT( getCell( setCell( board, TOP_LEFT, CROSS ), TOP_LEFT ) == CROSS );
-	CU_ASSERT( getCell( setCell( board, TOP_LEFT, CIRCLE ), TOP_LEFT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, EMPTY ), TOP_LEFT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, CROSS ), TOP_LEFT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, CIRCLE ), TOP_LEFT ) == CIRCLE );
 
-	CU_ASSERT( getCell( setCell( board, BOTTOM_RIGHT, EMPTY ), BOTTOM_RIGHT ) == EMPTY );
-	CU_ASSERT( getCell( setCell( board, BOTTOM_RIGHT, CROSS ), BOTTOM_RIGHT ) == CROSS );
-	CU_ASSERT( getCell( setCell( board, BOTTOM_RIGHT, CIRCLE ), BOTTOM_RIGHT ) == CIRCLE );
+	CU_ASSERT_TRUE( getCell( setCell( board, BOTTOM_RIGHT, EMPTY ), BOTTOM_RIGHT ) == EMPTY );
+	CU_ASSERT_TRUE( getCell( setCell( board, BOTTOM_RIGHT, CROSS ), BOTTOM_RIGHT ) == CROSS );
+	CU_ASSERT_TRUE( getCell( setCell( board, BOTTOM_RIGHT, CIRCLE ), BOTTOM_RIGHT ) == CIRCLE );
 
 	board = setCell( board, TOP_LEFT, CROSS );
 	board = setCell( board, TOP_CENTER, EMPTY );
@@ -96,42 +76,108 @@ void test_setCell(void) {
 	board = setCell( board, BOTTOM_RIGHT, EMPTY );
 
 	/* See comment in test_getCell */
-	CU_ASSERT( board == 4069 );
+	CU_ASSERT_TRUE( board == 4069 );
 
-	CU_ASSERT( getCell( board, TOP_LEFT ) == CROSS );
-	CU_ASSERT( getCell( board, TOP_CENTER ) == EMPTY );
-	CU_ASSERT( getCell( board, TOP_RIGHT ) == CIRCLE );
+	CU_ASSERT_EQUAL( getCell( board, TOP_LEFT ), CROSS );
+	CU_ASSERT_EQUAL( getCell( board, TOP_CENTER ), EMPTY );
+	CU_ASSERT_EQUAL( getCell( board, TOP_RIGHT ), CIRCLE );
 
-	CU_ASSERT( getCell( board, CENTER_LEFT ) == EMPTY );
-	CU_ASSERT( getCell( board, CENTER_CENTER ) == CIRCLE );
-	CU_ASSERT( getCell( board, CENTER_RIGHT ) == CROSS );
+	CU_ASSERT_EQUAL( getCell( board, CENTER_LEFT ), EMPTY );
+	CU_ASSERT_EQUAL( getCell( board, CENTER_CENTER ), CIRCLE );
+	CU_ASSERT_EQUAL( getCell( board, CENTER_RIGHT ), CROSS );
 
-	CU_ASSERT( getCell( board, BOTTOM_LEFT ) == CIRCLE );
-	CU_ASSERT( getCell( board, BOTTOM_CENTER ) == CROSS );
-	CU_ASSERT( getCell( board, BOTTOM_RIGHT ) == EMPTY );
+	CU_ASSERT_EQUAL( getCell( board, BOTTOM_LEFT ), CIRCLE );
+	CU_ASSERT_EQUAL( getCell( board, BOTTOM_CENTER ), CROSS );
+	CU_ASSERT_EQUAL( getCell( board, BOTTOM_RIGHT ), EMPTY );
 
+}
+
+void test_lastBit(void) {
+	CU_ASSERT_EQUAL( getLastBit ( EMPTY_BOARD ), 0 );
+	CU_ASSERT_EQUAL( getLastBit ( setLastBit( EMPTY_BOARD, 0 ) ), 0 );
+	CU_ASSERT_EQUAL( getLastBit ( setLastBit( EMPTY_BOARD, 1 ) ), 1 );
+}
+
+void test_isRotation(void) {
+	board_t top_right_circle;
+	CU_ASSERT_TRUE( isRotation( EMPTY_BOARD, EMPTY_BOARD ) );
+	top_right_circle = setCell( EMPTY_BOARD, TOP_RIGHT, CIRCLE );
+	CU_ASSERT_TRUE( isRotation( top_right_circle, setCell( EMPTY_BOARD, TOP_RIGHT, CIRCLE ) ) );
+	CU_ASSERT_EQUAL( rotationsLeft( top_right_circle, setCell( EMPTY_BOARD, TOP_RIGHT, CIRCLE ) ), 0 );
+
+	CU_ASSERT_TRUE( isRotation( top_right_circle, setCell( EMPTY_BOARD, BOTTOM_RIGHT, CIRCLE ) ) );
+	CU_ASSERT_EQUAL( rotationsLeft( top_right_circle, setCell( EMPTY_BOARD, BOTTOM_RIGHT, CIRCLE ) ), 1 );
+
+	CU_ASSERT_TRUE( isRotation( top_right_circle, setCell( EMPTY_BOARD, BOTTOM_LEFT, CIRCLE ) ) );
+	CU_ASSERT_EQUAL( rotationsLeft( top_right_circle, setCell( EMPTY_BOARD, BOTTOM_LEFT, CIRCLE ) ), 2 );
+
+	CU_ASSERT_TRUE( isRotation( top_right_circle, setCell( EMPTY_BOARD, TOP_LEFT, CIRCLE ) ) );
+	CU_ASSERT_EQUAL( rotationsLeft( top_right_circle, setCell( EMPTY_BOARD, TOP_LEFT, CIRCLE ) ), 3 );
+}
+
+void test_rotateLeft(void) {
+	board_t board;
+	CU_ASSERT_EQUAL( rotateLeft( EMPTY_BOARD ), EMPTY_BOARD );
+	board = setCell( EMPTY_BOARD, TOP_RIGHT, CIRCLE );
+	CU_ASSERT_EQUAL( rotateLeft( board ), setCell( EMPTY_BOARD, TOP_LEFT, CIRCLE ) );
+	board = 4069;
+	CU_ASSERT_EQUAL( rotateLeft( rotateLeft( rotateLeft( rotateLeft( board ) ) ) ), board );
+}
+
+void test_rotateRight(void) {
+	board_t board = 4069;
+	CU_ASSERT_NOT_EQUAL( 4069, rotateRight( board ) );
+	CU_ASSERT_EQUAL( board, rotateLeft( rotateRight( board ) ) );
+	CU_ASSERT_EQUAL( rotateLeft( rotateLeft( board ) ), rotateRight( rotateRight( board ) ) );
+}
+
+void test_reflection(void) {
+	board_t top_right_circle;
+	CU_ASSERT_EQUAL( horizontalReflection( EMPTY_BOARD ), verticalReflection( EMPTY_BOARD ) );
+	top_right_circle = setCell( EMPTY_BOARD, TOP_RIGHT, CIRCLE );
+	CU_ASSERT_NOT_EQUAL( top_right_circle, horizontalReflection(top_right_circle) );
+	CU_ASSERT_EQUAL( horizontalReflection(top_right_circle), setCell( EMPTY_BOARD, TOP_LEFT, CIRCLE ) );
+	CU_ASSERT_EQUAL( verticalReflection(top_right_circle), setCell( EMPTY_BOARD, BOTTOM_RIGHT, CIRCLE ) );
+}
+
+void test_isRotationOrReflection(void) {
+	board_t board = 4069;
+	CU_ASSERT_TRUE(
+		isRotationOrReflection(
+			board,
+			rotateLeft( rotateLeft ( horizontalReflection(board) ) )
+		)
+	);
 }
 
 int main() {
 	CU_pSuite pSuite = NULL;
 
-	/* initialize the CUnit test registry */
 	if ( CUE_SUCCESS != CU_initialize_registry() ) {
 		return CU_get_error();
 	}
 
-	/* add a suite to the registry */
 	pSuite = CU_add_suite( "Board Tests", NULL, NULL );
 	if ( NULL == pSuite ) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
-
-	/* add the tests to the suite */
 	CU_add_test( pSuite, "getCell", test_getCell );
 	CU_add_test( pSuite, "setCell", test_setCell );
+	CU_add_test( pSuite, "lastBit", test_lastBit );
 
-	/* Run all tests using the CUnit Basic interface */
+	pSuite = CU_add_suite( "Board Rotation Tests", NULL, NULL );
+	if ( NULL == pSuite ) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	CU_add_test( pSuite, "isRotation", test_isRotation );
+	CU_add_test( pSuite, "rotateLeft", test_rotateLeft );
+	CU_add_test( pSuite, "rotateRight", test_rotateRight );
+	CU_add_test( pSuite, "reflection", test_reflection );
+	CU_add_test( pSuite, "isRotationOrReflection", test_isRotationOrReflection );
+
 	CU_basic_set_mode( CU_BRM_VERBOSE );
 	CU_basic_run_tests();
 	CU_cleanup_registry();

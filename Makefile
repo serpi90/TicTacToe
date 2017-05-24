@@ -7,9 +7,9 @@ CFLAGS = $(DFLAGS) $(OFLAGS) $(LFLAGS)
 
 APPLICATIONS = board tests
 
-COMMON_HEADERS = board.h
-MODEL = 
-UTIL = 
+COMMON_HEADERS = board.h board_rotation.h board_print.h
+MODEL =
+UTIL =
 OBJECT_FILES = $(MODEL) $(UTIL)
 
 all: $(OBJECT_FILES) $(APPLICATIONS)
@@ -21,4 +21,3 @@ $(APPLICATIONS): %: %.c $(UTIL) $(COMMON_HEADERS)
 
 clean:
 	rm -f *.o $(APPLICATIONS)
-
