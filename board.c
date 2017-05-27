@@ -7,6 +7,8 @@
 
 int main() {
 	board_t board = EMPTY_BOARD;
+
+	printBoard( board );
 	board = setCell(board, TOP_LEFT, CIRCLE);
 	board = setCell(board, TOP_CENTER, CIRCLE);
 	board = setCell(board, TOP_RIGHT, CIRCLE);
@@ -16,12 +18,10 @@ int main() {
 	board = setCell(board, BOTTOM_LEFT, CIRCLE);
 	board = setCell(board, BOTTOM_CENTER, CIRCLE);
 	board = setCell(board, BOTTOM_RIGHT, CIRCLE);
-
 	printBoard( board );
+
 	board = setCell(board, TOP_RIGHT, CROSS);
 	board = setCell(board, TOP_CENTER, CROSS);
-
-	printBoard( board );
 	board = setCell(board, CENTER_CENTER, EMPTY);
 	printBoard( board );
 	return 0;
