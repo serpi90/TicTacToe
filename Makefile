@@ -4,20 +4,21 @@ LINKER_FLAGS = -lcunit
 CFLAGS = $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) $(LINKER_FLAGS)
 
 CROSS_PLATFORM_APPLICATIONS = board
-LINUX_APPLICATIONS = tests
+TESTS = tests_isometry
+TESTS += tests_short
 COMMON_HEADERS = cell_status.h position.h board_rotation.h board_print.h
 COMMON_HEADERS += board_short.h 
 
-APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(LINUX_APPLICATIONS)
+APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(TESTS)
 
 .PHONY: all clean
 
 all: $(APPLICATIONS)
 
 clean:
-	rm -f *.o *.exe $(APPLICATIONS)
+	rm -f *.o $(APPLICATIONS)
 
-$(LINUX_APPLICATIONS): %: %.c $(COMMON_HEADERS)
+$(TESTS): %: %.c $(COMMON_HEADERS)
 	$(LINK.c) -o $@ $<
 
 # sudo apt-get install mingw32

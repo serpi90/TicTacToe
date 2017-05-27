@@ -11,7 +11,7 @@ char cellValue( enum position_t value ) {
 }
 
 void printBoard( unsigned short board ) {
-	printf(" %c | %c | %c \n---+---+---\n %c | %c | %c \n---+---+---\n %c | %c | %c \n\nLastBit: %hu\n\n",
+	printf(" %c | %c | %c \n---+---+---\n %c | %c | %c \n---+---+---\n %c | %c | %c \n\n",
 			cellValue(getCell(board, TOP_LEFT)),
 			cellValue(getCell(board, TOP_CENTER)),
 			cellValue(getCell(board, TOP_RIGHT)),
@@ -20,8 +20,8 @@ void printBoard( unsigned short board ) {
 			cellValue(getCell(board, CENTER_RIGHT)),
 			cellValue(getCell(board, BOTTOM_LEFT)),
 			cellValue(getCell(board, BOTTOM_CENTER)),
-			cellValue(getCell(board, BOTTOM_RIGHT)),
-			getLastBit( board ) );
+			cellValue(getCell(board, BOTTOM_RIGHT))
+		);
 }
 
 #endif /* BOARD_PRINT_H */

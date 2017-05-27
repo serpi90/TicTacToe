@@ -1,3 +1,4 @@
 board
-tests
+tests_short
+tests_isometry
 *.exe

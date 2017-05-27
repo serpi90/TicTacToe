@@ -24,7 +24,5 @@ int main() {
 	printBoard( board );
 	board = setCell(board, CENTER_CENTER, EMPTY);
 	printBoard( board );
-	printBoard( setLastBit(board,0) );
-	printBoard( setLastBit(board,1) );
 	return 0;
 }

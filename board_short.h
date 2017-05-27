@@ -4,12 +4,8 @@
  * Last bit can be used to store whatever you wish
  *
  * Keep in mind that the board should be initialized with EMPTY_BOARD (0)
- * */
-
-/*
  * ceiling( ln_2( 3^9 -1 ) ) = 15 (bytes used to store information)
  * 2^15 -1 = 32767 (the mask to use)
- *
  * As sizeof(unsigned short) * 8 = 16 we have an extra bit to spare.
  */
 
@@ -22,25 +18,6 @@ typedef unsigned short board_t;
 #define BOARD_MASK 0x7FFF
 
 /* Cell manipulation functions */
-enum cell_status_t getCell( board_t board, enum position_t position );
-board_t setCell ( board_t board, enum position_t position, enum cell_status_t newStatus );
-
-/* Spare bit manipulation functions */
-unsigned char getLastBit ( board_t board );
-board_t setLastBit ( board_t board, unsigned char extra );
-
-/* Implementation */
-unsigned char getLastBit ( board_t board ) {
-	return board & ~BOARD_MASK ? 1 : 0;
-}
-
-board_t setLastBit ( board_t board, unsigned char extra ) {
-	if( extra ) {
-		return board | ~BOARD_MASK;
-	} else {
-		return board & BOARD_MASK;
-	}
-}
 
 enum cell_status_t getCell( board_t board, enum position_t position ) {
 	board &= BOARD_MASK;
