@@ -2,9 +2,10 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
-#include "board.h"
+#include "position.h"
+#include "cell_status.h"
+#include "board_short.h"
 #include "board_rotation.h"
-
 #include "board_print.h"
 
 void test_getCell(void) {
@@ -92,11 +93,13 @@ void test_setCell(void) {
 
 }
 
+#ifdef BOARD_SHORT_H
 void test_lastBit(void) {
 	CU_ASSERT_EQUAL( getLastBit ( EMPTY_BOARD ), 0 );
 	CU_ASSERT_EQUAL( getLastBit ( setLastBit( EMPTY_BOARD, 0 ) ), 0 );
 	CU_ASSERT_EQUAL( getLastBit ( setLastBit( EMPTY_BOARD, 1 ) ), 1 );
 }
+#endif /* BOARD_SHORT_H */
 
 void test_isRotation(void) {
 	board_t top_right_circle;
@@ -140,10 +143,10 @@ void test_reflection(void) {
 	CU_ASSERT_EQUAL( verticalReflection(top_right_circle), setCell( EMPTY_BOARD, BOTTOM_RIGHT, CIRCLE ) );
 }
 
-void test_isRotationOrReflection(void) {
+void test_isIsometry(void) {
 	board_t board = 4069;
 	CU_ASSERT_TRUE(
-		isRotationOrReflection(
+		isIsometry(
 			board,
 			rotateLeft( rotateLeft ( horizontalReflection(board) ) )
 		)
@@ -164,7 +167,9 @@ int main() {
 	}
 	CU_add_test( pSuite, "getCell", test_getCell );
 	CU_add_test( pSuite, "setCell", test_setCell );
+#ifdef BOARD_SHORT_H
 	CU_add_test( pSuite, "lastBit", test_lastBit );
+#endif /* BOARD_SHORT_H */
 
 	pSuite = CU_add_suite( "Board Rotation Tests", NULL, NULL );
 	if ( NULL == pSuite ) {
@@ -176,7 +181,7 @@ int main() {
 	CU_add_test( pSuite, "rotateLeft", test_rotateLeft );
 	CU_add_test( pSuite, "rotateRight", test_rotateRight );
 	CU_add_test( pSuite, "reflection", test_reflection );
-	CU_add_test( pSuite, "isRotationOrReflection", test_isRotationOrReflection );
+	CU_add_test( pSuite, "isIsometry", test_isIsometry );
 
 	CU_basic_set_mode( CU_BRM_VERBOSE );
 	CU_basic_run_tests();

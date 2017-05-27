@@ -5,16 +5,17 @@ CFLAGS = $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) $(LINKER_FLAGS)
 
 CROSS_PLATFORM_APPLICATIONS = board
 LINUX_APPLICATIONS = tests
-COMMON_HEADERS = board.h board_rotation.h board_print.h
+COMMON_HEADERS = cell_status.h position.h board_rotation.h board_print.h
+COMMON_HEADERS += board_short.h 
 
 APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(LINUX_APPLICATIONS)
+
+.PHONY: all clean
 
 all: $(APPLICATIONS)
 
 clean:
 	rm -f *.o *.exe $(APPLICATIONS)
-
-.PHONY: all clean
 
 $(LINUX_APPLICATIONS): %: %.c $(COMMON_HEADERS)
 	$(LINK.c) -o $@ $<

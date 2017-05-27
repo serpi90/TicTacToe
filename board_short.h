@@ -6,36 +6,20 @@
  * Keep in mind that the board should be initialized with EMPTY_BOARD (0)
  * */
 
-/* 
+/*
  * ceiling( ln_2( 3^9 -1 ) ) = 15 (bytes used to store information)
  * 2^15 -1 = 32767 (the mask to use)
  *
  * As sizeof(unsigned short) * 8 = 16 we have an extra bit to spare.
  */
 
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef BOARD_SHORT_H
+#define BOARD_SHORT_H
 
 /* Type Definitions */
 typedef unsigned short board_t;
 #define EMPTY_BOARD 0
-#define BOARD_MASK 32767
-enum position_t {
-	TOP_LEFT=0,
-	TOP_CENTER=1,
-	TOP_RIGHT=2,
-	CENTER_LEFT=3,
-	CENTER_CENTER=4,
-	CENTER_RIGHT=5,
-	BOTTOM_LEFT=6,
-	BOTTOM_CENTER=7,
-	BOTTOM_RIGHT=8
-};
-enum cell_status_t {
-	EMPTY=0,
-	CROSS=1,
-	CIRCLE=2
-};
+#define BOARD_MASK 0x7FFF
 
 /* Cell manipulation functions */
 enum cell_status_t getCell( board_t board, enum position_t position );
@@ -53,7 +37,7 @@ unsigned char getLastBit ( board_t board ) {
 board_t setLastBit ( board_t board, unsigned char extra ) {
 	if( extra ) {
 		return board | ~BOARD_MASK;
-	} else { 
+	} else {
 		return board & BOARD_MASK;
 	}
 }
@@ -74,5 +58,4 @@ board_t setCell ( board_t board, enum position_t position, enum cell_status_t ne
 	return ( ( board & BOARD_MASK ) - oldStatus + newStatus ) | extra;
 }
 
-#endif /* BOARD_H */
-
+#endif /* BOARD_SHORT_H */

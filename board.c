@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include "board.h"
+
+#include "position.h"
+#include "cell_status.h"
+#include "board_short.h"
 #include "board_print.h"
 
 int main() {

@@ -1,10 +1,8 @@
 #ifndef BOARD_ROTATION_H
 #define BOARD_ROTATION_H
 
-#include "board_print.h"
-
 unsigned char isRotation( board_t board, board_t otherBoard );
-unsigned char isRotationOrReflection( board_t board, board_t otherBoard );
+unsigned char isIsometry( board_t board, board_t otherBoard );
 
 board_t rotateLeft( board_t board );
 board_t rotateRight( board_t board );
@@ -26,7 +24,7 @@ char rotationsLeft( board_t board, board_t otherBoard ) {
   return -1;
 }
 
-unsigned char isRotationOrReflection( board_t board, board_t otherBoard ) {
+unsigned char isIsometry( board_t board, board_t otherBoard ) {
   return isRotation( board, otherBoard ) || isRotation( board, horizontalReflection(otherBoard) );
 }
 
