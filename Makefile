@@ -18,7 +18,7 @@ APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(TESTS)
 all: $(APPLICATIONS)
 
 clean:
-	rm -f *.o $(APPLICATIONS)
+	rm -f *.o *.exe $(APPLICATIONS)
 
 $(TESTS): %: %.c $(COMMON_HEADERS)
 	$(LINK.c) -o $@ $<
