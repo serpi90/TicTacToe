@@ -6,8 +6,10 @@ CFLAGS = $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) $(LINKER_FLAGS)
 CROSS_PLATFORM_APPLICATIONS = board
 TESTS = tests_isometry
 TESTS += tests_short
+TESTS += tests_int
 COMMON_HEADERS = cell_status.h position.h board_rotation.h board_print.h
-COMMON_HEADERS += board_short.h 
+COMMON_HEADERS += board_int.h
+COMMON_HEADERS += board_short.h
 
 APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(TESTS)
 
