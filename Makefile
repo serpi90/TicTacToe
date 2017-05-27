@@ -1,23 +1,25 @@
-C++ = g++
-CC = gcc
-DFLAGS = -Wall -Wextra -ansi -pedantic-errors
-OFLAGS = -O3
-LFLAGS = -lcunit
-CFLAGS = $(DFLAGS) $(OFLAGS) $(LFLAGS)
+WARNING_FLAGS = -Wall -Wextra -ansi -pedantic-errors
+OPTIMIZATION_FLAGS = -O3
+LINKER_FLAGS = -lcunit
+CFLAGS = $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) $(LINKER_FLAGS)
 
-APPLICATIONS = board tests
-
+CROSS_PLATFORM_APPLICATIONS = board
+LINUX_APPLICATIONS = tests
 COMMON_HEADERS = board.h board_rotation.h board_print.h
-MODEL =
-UTIL =
-OBJECT_FILES = $(MODEL) $(UTIL)
 
-all: $(OBJECT_FILES) $(APPLICATIONS)
+APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(LINUX_APPLICATIONS)
 
-# Target Applications
-
-$(APPLICATIONS): %: %.c $(UTIL) $(COMMON_HEADERS)
-	$(CC) -o $@ $< $(CFLAGS)
+all: $(APPLICATIONS)
 
 clean:
-	rm -f *.o $(APPLICATIONS)
+	rm -f *.o *.exe $(APPLICATIONS)
+
+.PHONY: all clean
+
+$(LINUX_APPLICATIONS): %: %.c $(COMMON_HEADERS)
+	$(LINK.c) -o $@ $<
+
+# sudo apt-get install mingw32
+$(CROSS_PLATFORM_APPLICATIONS): %: %.c $(COMMON_HEADERS)
+	$(LINK.c) -o $@ $<
+	i686-w64-mingw32-gcc $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) -o $@.exe $<
