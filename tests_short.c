@@ -54,6 +54,7 @@ void test_getCell(void) {
 
 void test_setCell(void) {
 	board_t board = EMPTY_BOARD;
+	unsigned short extra = 1 << 15;
 	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, EMPTY ), TOP_LEFT ) == EMPTY );
 	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, CROSS ), TOP_LEFT ) == CROSS );
 	CU_ASSERT_TRUE( getCell( setCell( board, TOP_LEFT, CIRCLE ), TOP_LEFT ) == CIRCLE );
@@ -72,10 +73,12 @@ void test_setCell(void) {
 
 	board = setCell( board, BOTTOM_LEFT, CIRCLE );
 	board = setCell( board, BOTTOM_CENTER, CROSS );
-	board = setCell( board, BOTTOM_RIGHT, EMPTY );
+	board = setCell( board , BOTTOM_RIGHT, EMPTY );
 
 	/* See comment in test_getCell */
 	CU_ASSERT_TRUE( board == 4069 );
+	/* Ensure the extra bit is not altered by setCell */
+	CU_ASSERT_EQUAL( setCell( board | extra, TOP_LEFT , CROSS), 4069 + extra );
 
 	CU_ASSERT_EQUAL( getCell( board, TOP_LEFT ), CROSS );
 	CU_ASSERT_EQUAL( getCell( board, TOP_CENTER ), EMPTY );
