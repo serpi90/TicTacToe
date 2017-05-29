@@ -1,31 +1,42 @@
 #ifndef BOARD_ROTATION_H
 #define BOARD_ROTATION_H
 
-unsigned char isRotation( board_t board, board_t otherBoard );
-unsigned char isIsometry( board_t board, board_t otherBoard );
-
 board_t rotateLeft( board_t board );
 board_t rotateRight( board_t board );
 board_t horizontalReflection( board_t board );
+board_t verticalReflection( board_t board );
 
-char rotationsLeft( board_t board, board_t otherBoard );
+int isRotation( board_t board, board_t otherBoard );
+int isIsometry( board_t board, board_t otherBoard );
+int rotationsLeft( board_t board, board_t otherBoard );
+int rotationsRight( board_t board, board_t otherBoard );
 
-unsigned char isRotation( board_t board, board_t otherBoard ) {
+int isRotation( board_t board, board_t otherBoard ) {
   return rotationsLeft( board, otherBoard ) >= 0;
 }
 
 /* Number of rotations to the left needed for otherBoard == board, -1 if not possible */
-char rotationsLeft( board_t board, board_t otherBoard ) {
+int rotationsLeft( board_t board, board_t otherBoard ) {
   unsigned char times = 4;
   while ( times-- ) {
     if( board == otherBoard ) return 3 - times;
-    otherBoard = rotateLeft(otherBoard);
+    otherBoard = rotateLeft( otherBoard );
   }
   return -1;
 }
 
-unsigned char isIsometry( board_t board, board_t otherBoard ) {
-  return isRotation( board, otherBoard ) || isRotation( board, horizontalReflection(otherBoard) );
+/* Number of rotations to the right needed for otherBoard == board, -1 if not possible */
+int rotationsRight( board_t board, board_t otherBoard ) {
+  unsigned char times = 4;
+  while ( times-- ) {
+    if( board == otherBoard ) return 3 - times;
+    otherBoard = rotateRight( otherBoard );
+  }
+  return -1;
+}
+
+int isIsometry( board_t board, board_t otherBoard ) {
+  return isRotation( board, otherBoard ) || isRotation( board, horizontalReflection( otherBoard ) );
 }
 
 board_t horizontalReflection( board_t board ) {
@@ -38,26 +49,7 @@ board_t horizontalReflection( board_t board ) {
   horizontalReflection = setCell( horizontalReflection, BOTTOM_RIGHT, getCell( board, BOTTOM_LEFT ) );
   return horizontalReflection;
 }
-/*
-To check if matches only 1 reflection is needed
-may not be the one with less combinations, but fewer checks are needed
-V = verticalReflection, H = horizontalReflection, LN = rotateLeft N times
-  Orig    |   L1      |   L2      |   L3
-  X . .   |   . . .   |   . X X   |   X X X
-  X . .   |   . . x   |   . . X   |   X . .
-  X X .   |   X X X   |   . . X   |   . . .
 
-  H       |   H+L1    |   H+L2    |   H+L3
-  . . X   |   X X X   |   X X .   |   . . .
-  . . X   |   . . X   |   X . .   |   X . .
-  . X X   |   . . .   |   X . .   |   X X X
-
-  V       |   V+L1    |   V+L2    |   V+L3
-  H+L2    |   H+L3    |   H       |   H+L1
-  X X .   |   . . .   |   . . X   |   X X X
-  X . .   |   X . .   |   . . X   |   . . X
-  X . .   |   X X X   |   . X X   |   . . .
-*/
 board_t verticalReflection( board_t board ) {
   board_t verticalReflection = board;
   verticalReflection = setCell( verticalReflection, TOP_LEFT, getCell( board, BOTTOM_LEFT ) );
@@ -69,7 +61,20 @@ board_t verticalReflection( board_t board ) {
   return verticalReflection;
 }
 
+/* Rotate left considering elements are specially ordered
+ * Rotating right has issues of overflow when using base 3 */
 board_t rotateLeft( board_t board ) {
+  /* Remove non board bits befor shifting, restore them at the end */
+  board_t rotated = ( board & BOARD_MASK ) / BOARD_BASE / BOARD_BASE;
+  rotated = setCell( rotated, BOTTOM_LEFT, getCell( board, TOP_LEFT ) );
+  rotated = setCell( rotated, CENTER_LEFT, getCell( board, TOP_CENTER ) );
+  rotated = setCell( rotated, CENTER_CENTER, getCell( board, CENTER_CENTER ) );
+  return rotated | ( board & ~BOARD_MASK );
+}
+
+/* Simple left rotation */
+/*
+  board_t rotateLeft( board_t board ) {
   board_t rotated = board;
   rotated = setCell( rotated, TOP_LEFT, getCell( board, TOP_RIGHT ) );
   rotated = setCell( rotated, TOP_CENTER, getCell( board, CENTER_RIGHT ) );
@@ -81,7 +86,7 @@ board_t rotateLeft( board_t board ) {
   rotated = setCell( rotated, CENTER_LEFT, getCell( board, TOP_CENTER ) );
   return rotated;
 }
-
+*/
 board_t rotateRight( board_t board ) {
   board_t rotated = board;
   rotated = setCell( rotated, TOP_RIGHT, getCell( board, TOP_LEFT ) );
