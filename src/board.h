@@ -14,8 +14,7 @@
 enum cell_status_t {
 	EMPTY=0,
 	CROSS=1,
-	CIRCLE=2,
-	OTHER=3
+	CIRCLE=2
 };
 
 enum position_t {
@@ -31,11 +30,11 @@ enum position_t {
 };
 
 /* Type Definitions */
-typedef unsigned int board_t;
+typedef unsigned short board_t;
 #define EMPTY_BOARD 0
 /* 18 bits */
-#define BOARD_MASK 0x3FFFF
-#define BOARD_BASE 4
+#define BOARD_MASK 0x7FFF
+#define BOARD_BASE 3
 
 /* Cell manipulation functions */
 enum cell_status_t getCell( board_t board, enum position_t position );
