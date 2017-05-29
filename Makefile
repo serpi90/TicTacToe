@@ -16,7 +16,7 @@ APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(TESTS)
 all: $(APPLICATIONS)
 
 clean:
-	rm -f *.o *.exe $(APPLICATIONS)
+	rm -f *.o *.xml $(APPLICATIONS)
 
 test: $(TESTS)
 	$(foreach theTest,$(TESTS),./$(theTest);)
@@ -24,7 +24,5 @@ test: $(TESTS)
 $(TESTS): %: %.c $(COMMON_HEADERS) tests.c
 	$(LINK.c) -o $@ $<
 
-# sudo apt-get install mingw32
 $(CROSS_PLATFORM_APPLICATIONS): %: %.c $(COMMON_HEADERS)
 	$(LINK.c) -o $@ $<
-	i686-w64-mingw32-gcc $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) -o $@.exe $<
