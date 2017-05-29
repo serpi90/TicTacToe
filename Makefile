@@ -1,28 +1,33 @@
-WARNING_FLAGS = -Wall -Wextra -ansi -pedantic-errors
-OPTIMIZATION_FLAGS = -O3
-LINKER_FLAGS = -lcunit
-CFLAGS = $(WARNING_FLAGS) $(OPTIMIZATION_FLAGS) $(LINKER_FLAGS)
+CFLAGS = -Wall -Wextra -ansi -pedantic-errors -O3
 
-CROSS_PLATFORM_APPLICATIONS = board
-TESTS = tests_short tests_int
-COMMON_HEADERS = board_rotation.h
-COMMON_HEADERS += board_int.h
-COMMON_HEADERS += board_short.h
+SRCDIR = src
+TESTDIR = test
 
-APPLICATIONS = $(CROSS_PLATFORM_APPLICATIONS) $(TESTS)
+APPLICATIONS = app
+TESTS = test_suite
 
-.PHONY: all clean
+OBJS = board.o board_rotation.o
+TEST_OBJS = board_test.o board_rotation_test.o
 
-all: $(APPLICATIONS)
+.PHONY : all clean test
+
+all : $(APPLICATIONS) $(TESTS)
+
+app : $(SRCDIR)/app.c $(OBJS)
+	$(LINK.c) -o $@ $^ -I$(SRCDIR)
+
+test_suite : $(TESTDIR)/test_suite.c $(OBJS) $(TEST_OBJS)
+	$(LINK.c) -o $@ $^ -lcunit -I$(TESTDIR)
+
+%.o : $(SRCDIR)/%.c $(SRCDIR)/%.h
+		$(LINK.c) -c $< -o $@
+
+%.o : $(TESTDIR)/%.c $(TESTDIR)/%.h
+		$(LINK.c) -c $< -o $@
 
 clean:
-	rm -f *.o *.xml $(APPLICATIONS)
+	rm -f *.o $(APPLICATIONS) $(TESTS)
 
 test: $(TESTS)
 	$(foreach theTest,$(TESTS),./$(theTest);)
 
-$(TESTS): %: %.c $(COMMON_HEADERS) tests.c
-	$(LINK.c) -o $@ $<
-
-$(CROSS_PLATFORM_APPLICATIONS): %: %.c $(COMMON_HEADERS)
-	$(LINK.c) -o $@ $<

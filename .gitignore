@@ -1,5 +1,3 @@
-board
-tests_short
-tests_int
-tests_isometry
-*.exe
+app
+test_suite
+*.o

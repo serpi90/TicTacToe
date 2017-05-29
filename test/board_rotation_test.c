@@ -1,20 +1,11 @@
+#ifndef BOARD_ROTATION_TESTS_C
+#define BOARD_ROTATION_TESTS_C
+
 #include <CUnit/CUnit.h>
-#include <CUnit/Automated.h>
 
-void test_setAndGetCellOnEmptyBoard ( ) {
-	enum position_t position = 0;
-	enum cell_status_t status = 0;
-	for( position = 0; position < 9; position++ ) {
-		for( status = 0; status < 4; status++ ) {
-			CU_ASSERT_TRUE( getCell( EMPTY_BOARD, position ) == EMPTY );
-			CU_ASSERT_TRUE( getCell( setCell( EMPTY_BOARD, position, EMPTY ), position ) == EMPTY );
-			CU_ASSERT_TRUE( getCell( setCell( EMPTY_BOARD, position, CROSS ), position ) == CROSS );
-			CU_ASSERT_TRUE( getCell( setCell( EMPTY_BOARD, position, CIRCLE ), position ) == CIRCLE );
-		}
-	}
-}
+#include "board_rotation_test.h"
 
-board_t exampleBoard( void ) {
+board_t rotationExampleBoard( void ) {
 	board_t board = ~BOARD_MASK;
 	board = setCell( board, TOP_LEFT, CROSS );
 	board = setCell( board, TOP_CENTER, EMPTY );
@@ -26,20 +17,6 @@ board_t exampleBoard( void ) {
 	board = setCell( board, BOTTOM_CENTER, CROSS );
 	board = setCell( board, BOTTOM_RIGHT, EMPTY );
 	return board;
-}
-
-void test_fullBoard( void ) {
-	board_t board = exampleBoard( );
-	CU_ASSERT_EQUAL( board & ~BOARD_MASK, ( board_t ) ~BOARD_MASK );
-	CU_ASSERT_EQUAL( getCell( board, TOP_LEFT ), CROSS );
-	CU_ASSERT_EQUAL( getCell( board, TOP_CENTER ), EMPTY );
-	CU_ASSERT_EQUAL( getCell( board, TOP_RIGHT ), CIRCLE );
-	CU_ASSERT_EQUAL( getCell( board, CENTER_LEFT ), EMPTY );
-	CU_ASSERT_EQUAL( getCell( board, CENTER_CENTER ), CIRCLE );
-	CU_ASSERT_EQUAL( getCell( board, CENTER_RIGHT ), CROSS );
-	CU_ASSERT_EQUAL( getCell( board, BOTTOM_LEFT ), CIRCLE );
-	CU_ASSERT_EQUAL( getCell( board, BOTTOM_CENTER ), CROSS );
-	CU_ASSERT_EQUAL( getCell( board, BOTTOM_RIGHT ), EMPTY );
 }
 
 void test_rotateLeft( void ) {
@@ -54,7 +31,7 @@ void test_rotateLeft( void ) {
 	CU_ASSERT_EQUAL( rotateLeft( board ), rotated );
 
 	/* Full Board */
-	board = exampleBoard( );
+	board = rotationExampleBoard( );
 	rotated = rotateLeft( board );
 	CU_ASSERT_EQUAL( getCell( rotated, TOP_LEFT ), getCell( board, TOP_RIGHT ) );
 	CU_ASSERT_EQUAL( getCell( rotated, TOP_CENTER ), getCell( board, CENTER_RIGHT ) );
@@ -82,7 +59,7 @@ void test_rotateRight( void ) {
 	CU_ASSERT_EQUAL( rotateRight( board ), rotated );
 
 	/* Full Board */
-	board = exampleBoard( );
+	board = rotationExampleBoard( );
 	rotated = rotateRight( board );
 	CU_ASSERT_EQUAL( getCell( rotated, TOP_RIGHT ), getCell( board, TOP_LEFT ) );
 	CU_ASSERT_EQUAL( getCell( rotated, CENTER_RIGHT ), getCell( board, TOP_CENTER ) );
@@ -99,7 +76,7 @@ void test_rotateRight( void ) {
 }
 
 void test_rotationQueries( void ) {
-	board_t board = exampleBoard( );
+	board_t board = rotationExampleBoard( );
 	board_t rotated = board;
 	short rotations = 0;
 	CU_ASSERT_TRUE( isRotation( EMPTY_BOARD, EMPTY_BOARD ) );
@@ -123,7 +100,7 @@ void test_rotationQueries( void ) {
 }
 
 void test_verticalReflection( void ) {
-	board_t board = exampleBoard( );
+	board_t board = rotationExampleBoard( );
 	board_t reflection = verticalReflection( board );
 
 	CU_ASSERT_EQUAL( verticalReflection( EMPTY_BOARD ), EMPTY_BOARD );
@@ -141,7 +118,7 @@ void test_verticalReflection( void ) {
 }
 
 void test_horizontalReflection( void ) {
-	board_t board = exampleBoard( );
+	board_t board = rotationExampleBoard( );
 	board_t reflection = horizontalReflection( board );
 
 	CU_ASSERT_EQUAL( horizontalReflection( EMPTY_BOARD ), EMPTY_BOARD );
@@ -159,7 +136,7 @@ void test_horizontalReflection( void ) {
 }
 
 void test_isIsometry( void ) {
-	board_t board = exampleBoard( );
+	board_t board = rotationExampleBoard( );
 	board_t isomtery = board;
 
 	CU_ASSERT_TRUE( isIsometry( board, isomtery ) );
@@ -180,36 +157,4 @@ void test_isIsometry( void ) {
 	CU_ASSERT_TRUE( isIsometry( board, isomtery ) );
 }
 
-int main( ) {
-	CU_pSuite pSuite = NULL;
-
-	if ( CUE_SUCCESS != CU_initialize_registry( ) ) {
-		return CU_get_error( );
-	}
-
-	pSuite = CU_add_suite( "Board Tests", NULL, NULL );
-	if ( NULL == pSuite ) {
-		CU_cleanup_registry( );
-		return CU_get_error( );
-	}
-	CU_add_test( pSuite, "Set & Get single Cells on an Empty Board", test_setAndGetCellOnEmptyBoard );
-	CU_add_test( pSuite, "Set & Get a full board", test_fullBoard );
-
-	pSuite = CU_add_suite( "Board Isometry Tests", NULL, NULL );
-	if ( NULL == pSuite ) {
-		CU_cleanup_registry( );
-		return CU_get_error( );
-	}
-
-	CU_add_test( pSuite, "Rotate Board Left", test_rotateLeft );
-	CU_add_test( pSuite, "Rotate Board Right", test_rotateRight );
-	CU_add_test( pSuite, "Queries for: Is Rotation, Rotations to Left and Rotations to Right", test_rotationQueries );
-	CU_add_test( pSuite, "Vertical Reflection", test_verticalReflection );
-	CU_add_test( pSuite, "Horizontal Reflection", test_horizontalReflection );
-	CU_add_test( pSuite, "Isometry", test_isIsometry );
-
-	CU_set_output_filename( BOARD_BASE == 3 ? "short" : "int");
-	CU_automated_run_tests( );
-	CU_cleanup_registry( );
-	return CU_get_error( );
-}
+#endif /* BOARD_ROTATION_TESTS_C */
