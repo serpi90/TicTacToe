@@ -18,6 +18,9 @@ all: $(APPLICATIONS)
 clean:
 	rm -f *.o *.exe $(APPLICATIONS)
 
+test: $(TESTS)
+	$(foreach theTest,$(TESTS),./$(theTest);)
+
 $(TESTS): %: %.c $(COMMON_HEADERS) tests.c
 	$(LINK.c) -o $@ $<
 
