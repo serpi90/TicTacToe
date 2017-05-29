@@ -23,7 +23,7 @@ void printBoard( unsigned short board ) {
 			cellValue( getCell( board, BOTTOM_LEFT ) ),
 			cellValue( getCell( board, BOTTOM_CENTER ) ),
 			cellValue( getCell( board, BOTTOM_RIGHT ) )
-		 );
+		  );
 }
 
 int main( ) {

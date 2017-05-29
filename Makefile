@@ -20,10 +20,10 @@ test_suite : $(TESTDIR)/test_suite.c $(OBJS) $(TEST_OBJS)
 	$(LINK.c) -o $@ $^ -lcunit -I$(TESTDIR)
 
 %.o : $(SRCDIR)/%.c $(SRCDIR)/%.h
-		$(LINK.c) -c $< -o $@
+	$(LINK.c) -c $< -o $@
 
 %.o : $(TESTDIR)/%.c $(TESTDIR)/%.h
-		$(LINK.c) -c $< -o $@
+	$(LINK.c) -c $< -o $@
 
 clean:
 	rm -f *.o $(APPLICATIONS) $(TESTS)
