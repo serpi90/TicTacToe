@@ -1,5 +1,5 @@
 #include <CUnit/CUnit.h>
-#include <CUnit/Basic.h>
+#include <CUnit/Automated.h>
 
 void test_setAndGetCellOnEmptyBoard ( ) {
 	enum position_t position = 0;
@@ -208,8 +208,8 @@ int main( ) {
 	CU_add_test( pSuite, "Horizontal Reflection", test_horizontalReflection );
 	CU_add_test( pSuite, "Isometry", test_isIsometry );
 
-	CU_basic_set_mode( CU_BRM_VERBOSE );
-	CU_basic_run_tests( );
+	CU_set_output_filename( BOARD_BASE == 3 ? "short" : "int");
+	CU_automated_run_tests( );
 	CU_cleanup_registry( );
 	return CU_get_error( );
 }
