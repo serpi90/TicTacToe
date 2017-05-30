@@ -13,9 +13,9 @@ board_t rotationExampleBoard( void ) {
 	board = setCell( board, CENTER_LEFT, EMPTY );
 	board = setCell( board, CENTER_CENTER, CIRCLE );
 	board = setCell( board, CENTER_RIGHT, CROSS );
-	board = setCell( board, BOTTOM_LEFT, CIRCLE );
+	board = setCell( board, BOTTOM_LEFT, EMPTY );
 	board = setCell( board, BOTTOM_CENTER, CROSS );
-	board = setCell( board, BOTTOM_RIGHT, EMPTY );
+	board = setCell( board, BOTTOM_RIGHT, CIRCLE );
 	return board;
 }
 
