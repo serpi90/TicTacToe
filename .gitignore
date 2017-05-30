@@ -1,3 +1,5 @@
 app
 test_suite
 *.o
+*.gcda
+*.gcno
