@@ -4,13 +4,18 @@
 #include "board.h"
 
 enum cell_status_t getCell( board_t board, enum position_t position ) {
-	return ( board >> ( position * 2 ) ) & 0x3;
+	board &= BOARD_MASK;
+	while( position-- ) board /= 3;
+	return board % 3;
 }
 
 board_t setCell ( board_t board, enum position_t position, enum cell_status_t newStatus ) {
-	unsigned char offset = position * 2;
-	/* Remove the old status bits, and set the new status bits */
-	return ( board & ~( 0x3 << offset ) ) | ( newStatus << offset );
+	unsigned short oldStatus = getCell( board, position );
+	while( position-- ) {
+		oldStatus *= 3;
+		newStatus *= 3;
+	}
+	return board - oldStatus + newStatus;
 }
 
 #endif /* BOARD_C */
