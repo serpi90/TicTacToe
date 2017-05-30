@@ -31,7 +31,9 @@ board_t rotateRight( board_t board ) {
 int rotationsLeft( board_t board, board_t otherBoard ) {
 	unsigned char times = 4;
 	while ( times-- ) {
-		if( board == otherBoard ) return 3 - times;
+		if( board == otherBoard ) {
+			return 3 - times;
+		}
 		otherBoard = rotateLeft( otherBoard );
 	}
 	return -1;
@@ -40,7 +42,9 @@ int rotationsLeft( board_t board, board_t otherBoard ) {
 int rotationsRight( board_t board, board_t otherBoard ) {
 	unsigned char times = 4;
 	while ( times-- ) {
-		if( board == otherBoard ) return 3 - times;
+		if( board == otherBoard ) {
+			return 3 - times;
+		}
 		otherBoard = rotateRight( otherBoard );
 	}
 	return -1;
@@ -73,11 +77,14 @@ board_t verticalReflection( board_t board ) {
 }
 
 int isReflection( board_t board, board_t otherBoard ) {
-	return board == verticalReflection( otherBoard ) || board == horizontalReflection( otherBoard );
+	return board == otherBoard
+		|| board == verticalReflection( otherBoard )
+		|| board == horizontalReflection( otherBoard );
 }
 
 int isIsometry( board_t board, board_t otherBoard ) {
-	return isRotation( board, otherBoard ) || isRotation( board, horizontalReflection( otherBoard ) );
+	return isRotation( board, otherBoard )
+		|| isRotation( board, horizontalReflection( otherBoard ) );
 }
 
 #endif /* BOARD_ROTATION_C */

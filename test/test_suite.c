@@ -33,6 +33,7 @@ int main( ) {
 	CU_add_test( pSuite, "Queries for: Is Rotation, Rotations to Left and Rotations to Right", test_rotationQueries );
 	CU_add_test( pSuite, "Vertical Reflection", test_verticalReflection );
 	CU_add_test( pSuite, "Horizontal Reflection", test_horizontalReflection );
+	CU_add_test( pSuite, "Reflection Query", test_isReflection );
 	CU_add_test( pSuite, "Isometry", test_isIsometry );
 
 	CU_basic_set_mode( CU_BRM_VERBOSE );

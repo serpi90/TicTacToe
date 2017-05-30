@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -ansi -pedantic-errors -O3
+CFLAGS = -Wall -Wextra -ansi -pedantic-errors -O3 --coverage
 
 SRCDIR = src
 TESTDIR = test
@@ -26,7 +26,7 @@ test_suite : $(TESTDIR)/test_suite.c $(OBJS) $(TEST_OBJS)
 	$(LINK.c) -c $< -o $@
 
 clean:
-	rm -f *.o $(APPLICATIONS) $(TESTS)
+	rm -f *.o $(APPLICATIONS) $(TESTS) *.gcda *.gcno
 
 test: $(TESTS)
 	$(foreach theTest,$(TESTS),./$(theTest);)

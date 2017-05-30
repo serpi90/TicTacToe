@@ -13,9 +13,9 @@ board_t rotationExampleBoard( void ) {
 	board = setCell( board, CENTER_LEFT, EMPTY );
 	board = setCell( board, CENTER_CENTER, CIRCLE );
 	board = setCell( board, CENTER_RIGHT, CROSS );
-	board = setCell( board, BOTTOM_LEFT, CIRCLE );
+	board = setCell( board, BOTTOM_LEFT, EMPTY );
 	board = setCell( board, BOTTOM_CENTER, CROSS );
-	board = setCell( board, BOTTOM_RIGHT, EMPTY );
+	board = setCell( board, BOTTOM_RIGHT, CIRCLE );
 	return board;
 }
 
@@ -134,6 +134,19 @@ void test_horizontalReflection( void ) {
 	CU_ASSERT_EQUAL( getCell( reflection, CENTER_CENTER ), getCell( board, CENTER_CENTER ) );
 	CU_ASSERT_EQUAL( getCell( reflection, BOTTOM_CENTER ), getCell( board, BOTTOM_CENTER ) );
 }
+
+
+void test_isReflection( void ) {
+	board_t board = rotationExampleBoard( );
+
+	CU_ASSERT_TRUE( isReflection( EMPTY_BOARD, EMPTY_BOARD ) );
+	CU_ASSERT_FALSE( isReflection( board, EMPTY_BOARD ) );
+
+	CU_ASSERT_TRUE( isReflection( board, board ) );
+	CU_ASSERT_TRUE( isReflection( board, horizontalReflection( board ) ) );
+	CU_ASSERT_TRUE( isReflection( board, verticalReflection( board ) ) );
+}
+
 
 void test_isIsometry( void ) {
 	board_t board = rotationExampleBoard( );
