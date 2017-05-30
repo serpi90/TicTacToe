@@ -43,7 +43,7 @@ int rotationsRight( board_t board, board_t otherBoard ) {
 	unsigned char times = 4;
 	while ( times-- ) {
 		if( board == otherBoard ) {
-		   	return 3 - times;
+			return 3 - times;
 		}
 		otherBoard = rotateRight( otherBoard );
 	}

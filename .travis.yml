@@ -3,14 +3,15 @@ script: make test
 before_install:
   - wget http://downloads.sourceforge.net/project/cunit/CUnit/2.1-2/CUnit-2.1-2-src.tar.bz2
   - tar -xvjpf CUnit-2.1-2-src.tar.bz2
+  - mkdir cunit
   - pushd CUnit-2.1-2
-  - ./configure --prefix=$TRAVIS_BUILD_DIR
+  - ./configure --prefix=$TRAVIS_BUILD_DIR/cunit --enable-automated=no --enable-console=no 
   - make
-  - make install
-  - export C_INCLUDE_PATH=$TRAVIS_BUILD_DIR/include:$C_INCLUDE_PATH
-  - export LIBRARY_PATH=$TRAVIS_BUILD_DIR/lib:$LIBRARY_PATH
-  - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/lib:$LD_LIBRARY_PATH
+  - make install clean
+  - export C_INCLUDE_PATH=$TRAVIS_BUILD_DIR/cunit/include:$C_INCLUDE_PATH
+  - export LIBRARY_PATH=$TRAVIS_BUILD_DIR/cunit/lib:$LIBRARY_PATH
+  - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/cunit/lib:$LD_LIBRARY_PATH
   - popd
   - pip install --user cpp-coveralls
 after_success:
-  - coveralls --exclude src/app --exclude test --gcov-options '\-lp'
+    - coveralls --exclude test/test_suite.c --exclude "CUnit-2.1-2" --exclude cunit --gcov-options '\-lp'

@@ -12,7 +12,7 @@ char cellValue( enum position_t value ) {
 	}
 }
 
-void printBoard( unsigned short board ) {
+void printBoard( board_t board ) {
 	printf( " %c | %c | %c \n---+---+---\n %c | %c | %c \n---+---+---\n %c | %c | %c \n\n",
 			cellValue( getCell( board, TOP_LEFT ) ),
 			cellValue( getCell( board, TOP_CENTER ) ),
