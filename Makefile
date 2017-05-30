@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -ansi -pedantic-errors -O3
+CFLAGS = -Wall -Wextra -ansi -pedantic-errors -O3 --coverage
 
 SRCDIR = src
 TESTDIR = test

@@ -11,3 +11,6 @@ before_install:
   - export LIBRARY_PATH=$TRAVIS_BUILD_DIR/lib:$LIBRARY_PATH
   - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/lib:$LD_LIBRARY_PATH
   - popd
+  - pip install --user cpp-coveralls
+after_success:
+  - coveralls --exclude src/app --exclude tests --gcov-options '\-lp'
