@@ -1,12 +1,16 @@
 /**
- * Store a tic-tac-toe board using an unsigned in ( 32 bits )
- * First 18 bits are used to encode cell state in base 2
- * EMPTY = 00 (0),
- * CROSS = 01 (1),
- * CIRCLE= 10 (2),
- * OTHER = 11 (3)
- * Last 14 bits can be used to store whatever you wish
- * */
+ * Store a tic-tac-toe board using an unsigned short ( 16 bits )
+ * First 15 bits are used to encode cell state in base 3
+ * Last bit can be used to store whatever you wish
+ * EMPTY = 0,
+ * CROSS = 1,
+ * CIRCLE= 2
+ * Ceiling( ln_2( 3^9 - 1 ) ) = 15 ( bytes used to store information )
+ * Last bit can be used to store whatever you with
+ *
+ * Keep in mind that the board should be initialized with EMPTY_BOARD ( 0 ),
+ * having something else in the first 15 bits will mess the encoding.
+ */
 
 #ifndef BOARD_H
 #define BOARD_H
