@@ -4,19 +4,16 @@
 #include "board.h"
 #include "board_rotation.h"
 
+/* Rotate left considering elements are specially ordered
+ * Rotating right has issues of overflow when using base 3 */
 board_t rotateLeft( board_t board ) {
-	board_t rotated = board;
-	rotated = setCell( rotated, TOP_LEFT, getCell( board, TOP_RIGHT ) );
-	rotated = setCell( rotated, TOP_CENTER, getCell( board, CENTER_RIGHT ) );
-	rotated = setCell( rotated, TOP_RIGHT, getCell( board, BOTTOM_RIGHT ) );
-	rotated = setCell( rotated, CENTER_RIGHT, getCell( board, BOTTOM_CENTER ) );
-	rotated = setCell( rotated, BOTTOM_RIGHT, getCell( board, BOTTOM_LEFT ) );
-	rotated = setCell( rotated, BOTTOM_CENTER, getCell( board, CENTER_LEFT ) );
+	/* Remove non board bits befor shifting, restore them at the end */
+	board_t rotated = ( board & BOARD_MASK ) / BOARD_BASE / BOARD_BASE;
 	rotated = setCell( rotated, BOTTOM_LEFT, getCell( board, TOP_LEFT ) );
 	rotated = setCell( rotated, CENTER_LEFT, getCell( board, TOP_CENTER ) );
-	return rotated;
+	rotated = setCell( rotated, CENTER_CENTER, getCell( board, CENTER_CENTER ) );
+	return rotated | ( board & ~BOARD_MASK );
 }
-
 
 board_t rotateRight( board_t board ) {
 	board_t rotated = board;
