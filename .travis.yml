@@ -4,7 +4,7 @@ before_install:
   - wget http://downloads.sourceforge.net/project/cunit/CUnit/2.1-2/CUnit-2.1-2-src.tar.bz2
   - tar -xvjpf CUnit-2.1-2-src.tar.bz2
   - pushd CUnit-2.1-2
-  - ./configure --prefix=$TRAVIS_BUILD_DIR
+  - ./configure --prefix=$TRAVIS_BUILD_DIR --enable-automated=no --enable-console=no 
   - make
   - make install clean
   - export C_INCLUDE_PATH=$TRAVIS_BUILD_DIR/include:$C_INCLUDE_PATH
@@ -13,4 +13,4 @@ before_install:
   - popd
   - pip install --user cpp-coveralls
 after_success:
-    - coveralls --exclude src/app --exclude test --exclude "CUnit-2.1-2" --exclude $TRAVIS_BUILD_DIR/include --exclude $TRAVIS_BUILD_DIR/doc --exclude $TRAVIS_BUILD_DIR/lib --gcov-options '\-lp'
+    - coveralls --exclude test/test_suite.c --exclude test --exclude "CUnit-2.1-2" --exclude include --exclude doc --exclude lib --gcov-options '\-lp'
