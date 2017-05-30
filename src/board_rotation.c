@@ -83,11 +83,8 @@ int isReflection( board_t board, board_t otherBoard ) {
 }
 
 int isIsometry( board_t board, board_t otherBoard ) {
-	if( isRotation( board, otherBoard ) ) {
-		return 1;
-	} else {
-		return isRotation( board, horizontalReflection( otherBoard ) );
-	}
+	return isRotation( board, otherBoard )
+		|| isRotation( board, horizontalReflection( otherBoard ) );
 }
 
 #endif /* BOARD_ROTATION_C */
