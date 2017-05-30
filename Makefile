@@ -22,7 +22,7 @@ test_suite : $(TESTDIR)/test_suite.c $(OBJS) $(TEST_OBJS)
 %.o : $(SRCDIR)/%.c $(SRCDIR)/%.h
 	$(LINK.c) -c $< -o $@
 
-%.o : $(TESTDIR)/%.c $(TESTDIR)/%.h
+%.o : $(TESTDIR)/%.c $(TESTDIR)/%.h $(OBJS)
 	$(LINK.c) -c $< -o $@
 
 clean:
